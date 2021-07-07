@@ -196,7 +196,7 @@ def upload_gene_table_object_to_KBase(gene_table_fp, dfu, ws,
     }
 
     if ws_id is None:
-        ws_info = ws.get_workspace_info({'workspace': params['workspace_name']})
+        ws_info = ws.get_workspace_info({'workspace': ws_name})
         ws_id = ws_info[0]
 
 
