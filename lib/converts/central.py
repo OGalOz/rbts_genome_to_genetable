@@ -15,7 +15,8 @@ from converts.genbank_to_gene_table import genbank_and_genome_fna_to_gene_table
 
 
 def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
-                             ws, dfu, gene_table_name,
+                             ws, ws_name,
+                             dfu, gene_table_name,
                              test_bool=False,
                              upload_bool=True):
     """
@@ -54,7 +55,7 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
     num_lines = genbank_and_genome_fna_to_gene_table(gbk_fp, genome_fna_fp, gene_table_fp)
    
     if upload_bool:
-        res = upload_gene_table_object_to_KBase(gene_table_fp, dfu, ws,
+        res = upload_gene_table_object_to_KBase(gene_table_fp, dfu, ws, ws_name,
                                             num_lines, 
                                             genome_ref, genome_scientific_name,
                                             gene_table_name,
@@ -145,6 +146,7 @@ def GetGenomeOrganismName(ws, genome_ref, test_bool):
 
 
 def upload_gene_table_object_to_KBase(gene_table_fp, dfu, ws,
+                                      ws_name,
                                       num_lines,
                                       genome_ref, organism_scientific_name,
                                       gene_table_name,

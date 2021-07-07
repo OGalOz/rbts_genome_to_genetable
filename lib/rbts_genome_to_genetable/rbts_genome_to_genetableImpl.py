@@ -51,6 +51,10 @@ class rbts_genome_to_genetable:
         """
         This example function accepts any number of parameters and returns results in a KBaseReport
         :param params: instance of mapping from String to unspecified object
+            params must include:
+                workspace_name,
+                genome_ref,
+                output_name
         :returns: instance of type "ReportResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
         """
@@ -69,7 +73,8 @@ class rbts_genome_to_genetable:
 
         # Actual program
         res, res_dir = genome_ref_to_gene_table(genome_ref, gfu, self.shared_folder,
-                                               ws, dfu, output_name, test_bool=test_bool,
+                                               ws, params['workspace_name'],
+                                               dfu, output_name, test_bool=test_bool,
                                                 upload_bool=upload_bool)
 
         logging.info("Results:")
