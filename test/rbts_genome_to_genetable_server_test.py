@@ -67,9 +67,11 @@ class rbts_genome_to_genetableTest(unittest.TestCase):
 
         # We add 'test_run' key to params in order to get the right workspace ID
         test_params = {
+                "workspace_name": self.wsName,
                 "genome_ref": "62572/2/1",
                 "output_name": "Test_Genes_Table",
-                "test_run": 1
+                "test_run": 1,
+                "upload_bool": False
         }
 
         ret = self.serviceImpl.run_rbts_genome_to_genetable(self.ctx, test_params)

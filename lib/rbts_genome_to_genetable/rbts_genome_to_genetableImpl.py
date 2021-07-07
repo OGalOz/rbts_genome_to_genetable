@@ -42,6 +42,7 @@ class rbts_genome_to_genetable:
         self.shared_folder = config['scratch']
         logging.basicConfig(format='%(created)s %(levelname)s: %(message)s',
                             level=logging.INFO)
+        self.ws_url = config['workspace-url']
         #END_CONSTRUCTOR
         pass
 
@@ -63,11 +64,17 @@ class rbts_genome_to_genetable:
         token = os.environ.get('KB_AUTH_TOKEN', None)
         ws = Workspace(self.ws_url, token=token)
 
-        genome_ref, output_name, test_bool = validate_params(params)
+
+        genome_ref, output_name, test_bool, upload_bool = validate_params(params)
 
         # Actual program
-        genes_GC_fp = genome_ref_to_gene_table(genome_ref, gfu, self.shared_folder,
-                                               ws, dfu, output_name, test_bool=test_bool)
+        res, res_dir = genome_ref_to_gene_table(genome_ref, gfu, self.shared_folder,
+                                               ws, dfu, output_name, test_bool=test_bool,
+                                                upload_bool=upload_bool)
+
+        logging.info("Results:")
+        # Name, Type, Date
+        logging.info(res)
 
 
         # Returning file in zipped format:-------------------------------

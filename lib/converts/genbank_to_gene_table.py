@@ -51,10 +51,10 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
                    "pseudogene": 7, "misc_feature": 20, 
                    "gene": 21}
 
+    locusIdcount = 1
     # Each gb_record represents a scaffold
     for gb_record in gb_record_generator:
 
-        locus_tag = gb_record.name
         #Genome sequence:
         g_seq = str(gb_record.seq)
 
@@ -71,8 +71,6 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
         for i in range(g_feat_len):
 
             current_feat = g_features[i]
-            current_seq = str(current_feat.seq).upper()
-            GC, nTA = get_GC_and_nTA(dna_seq_str)
 
             if current_feat.type == "source":
                 print("Feature is of type 'source':")
@@ -86,7 +84,7 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
             strand = "null"
             desc = "null"
             typ = "null"
-            #locus_tag = "null"
+            #locusId = "null"
             sysName = "null"
             name = "null"
 
@@ -96,6 +94,10 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
             # End
             end = str(current_feat.location.end + 1)
 
+            current_seq = g_seq[current_feat.location.start:current_feat.location.end].upper()
+            GC, nTA = get_GC_and_nTA(current_seq)
+
+
             # Strand
             if current_feat.strand == 1:
                 strand = "+"
@@ -104,6 +106,9 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
             else:
                 logging.critical("Could not recognize strand type.")
                 raise Exception("Parsing strand failed.")
+
+            name = str(current_feat.id)
+
 
             # Desc (Description)
             if "product" in current_feat.qualifiers.keys():
@@ -122,9 +127,11 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
                         + typ_str)
                 typ = "0"
             if typ == "1":
-                out_FH.write("\t".join([locus_tag, sysName, typ, scaffold,
+                locusId = "RBTS_" + str(locusIdcount)
+                out_FH.write("\t".join([locusId, sysName, typ, scaffold,
                         begin, end, strand, name, desc, str(GC), str(nTA)]) + "\n")
                 num_lines += 1
+                locusIdcount += 1
             else:
                 logging.info(f"Did not write annotation for gene with type {typ}")
     
@@ -233,7 +240,7 @@ def OLD_convert_genbank_to_gene_table(genbank_filepath, output_filepath, gff_fas
             strand = "null"
             desc = "null"
             typ = "null"
-            locus_tag = "null"
+            locusId = "null"
             sysName = "null"
             name = "null"
             GC = "null"
@@ -288,11 +295,11 @@ def OLD_convert_genbank_to_gene_table(genbank_filepath, output_filepath, gff_fas
             # Locus ID:
             if "locus_tag" in current_feat.qualifiers.keys():
                 if gff_fasta_gbk:
-                    locus_tag = str(current_feat.qualifiers['locus_tag'][0].split(' ')[0])
+                    locusId = str(current_feat.qualifiers['locus_tag'][0].split(' ')[0])
                 else:
-                    locus_tag = str(current_feat.qualifiers['locus_tag'][0])
+                    locusId = str(current_feat.qualifiers['locus_tag'][0])
             else:
-                locus_tag = "Unknown_Locus_tag."
+                locusId = "Unknown_Locus_tag."
                 logging.critical("Could not find locus tag in current_feat")
 
             # TYPE - Note that we don't like misc_feature or gene
@@ -309,7 +316,7 @@ def OLD_convert_genbank_to_gene_table(genbank_filepath, output_filepath, gff_fas
                         + typ_str)
                 typ = "0"
             if typ == "1":
-                out_FH.write("\t".join([locus_tag, sysName, typ, scaffold,
+                out_FH.write("\t".join([locusId, sysName, typ, scaffold,
                         begin, end, strand, name, desc, GC, nTA]) + "\n")
     except:
         logging.critical("Could not parse all features in genbank file.")
