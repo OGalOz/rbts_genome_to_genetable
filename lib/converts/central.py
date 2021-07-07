@@ -212,8 +212,8 @@ def upload_gene_table_object_to_KBase(gene_table_fp, dfu, ws,
     }
     # save_objects returns a list of object_infos
     dfu_object_info = dfu.save_objects(save_object_params)[0]
-    print("dfu_object_info: ")
-    print(dfu_object_info)
+    logging.info("dfu_object_info after saving Gene Table: ")
+    logging.info(dfu_object_info)
     return {
         "Name": dfu_object_info[1],
         "Type": dfu_object_info[2],

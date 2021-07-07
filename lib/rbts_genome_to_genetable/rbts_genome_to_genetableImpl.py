@@ -100,6 +100,7 @@ class rbts_genome_to_genetable:
         report_info = report_util.create_extended_report({
                                         'message': "Finished running Genome to Genes Table.",
                                         'file_links': [dir_link],
+                                        "objects_created": [],
                                         "report_object_name": params["output_name"],
                                         'workspace_name': params['workspace_name']
                                         })
