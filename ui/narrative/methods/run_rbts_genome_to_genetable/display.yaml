@@ -1,0 +1,45 @@
+#
+# define display information
+#
+name: RBTnSeq Genome to Genes Table
+
+tooltip: |
+    Create Genes Table from Genome Object for RBTnSeq
+
+screenshots: []
+
+icon: icon.png
+
+#
+# define a set of similar apps that might be useful to the user
+#
+suggestions:
+    apps:
+        related:
+            [app1, app2]
+        next:
+            [app3, app4]
+
+#
+# Configure the display and description of parameters
+#
+parameters :
+    genome_ref :
+        ui-name : |
+            Genome
+        short-hint : |
+            The Genome from which you'll be creating the genes table.
+        long-hint  : |
+            The Genome from which you'll be creating the genes table. The program
+            takes the genbank file and genome FNA to make the table.
+    output_name :
+        ui-name : |
+            Genes Table Name
+        short-hint : |
+            Output Name for Genes Table.
+        long-hint  : |
+            Output Name for Genes Table. Must not contain spaces.
+
+description : |
+   In order to run the RBTnSeq suite of programs, you'll need several data types
+   within your narrative, including the Genes Table data type.
