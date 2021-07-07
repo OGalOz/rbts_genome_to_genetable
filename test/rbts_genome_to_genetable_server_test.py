@@ -69,9 +69,9 @@ class rbts_genome_to_genetableTest(unittest.TestCase):
         test_params = {
                 "workspace_name": self.wsName,
                 "genome_ref": "62572/2/1",
-                "output_name": "Test_Genes_Table",
+                "output_name": "Test_Genes_Table2",
                 "test_run": 1,
-                "upload_bool": False
+                "upload_bool": True 
         }
 
         ret = self.serviceImpl.run_rbts_genome_to_genetable(self.ctx, test_params)
