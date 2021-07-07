@@ -104,6 +104,10 @@ class rbts_genome_to_genetable:
                                         "report_object_name": params["output_name"],
                                         'workspace_name': params['workspace_name']
                                         })
+
+        logging.info("report_info after creating extended report.")
+        logging.info(report_info)
+
         output = {
             'report_name': report_info['name'],
             'report_ref': report_info['ref'],
