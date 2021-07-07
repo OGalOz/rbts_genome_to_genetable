@@ -94,13 +94,15 @@ class rbts_genome_to_genetable:
                 + ' Genome to Genes Table.'
         }
 
-        report = KBaseReport(self.callback_url)
+        report_util = KBaseReport(self.callback_url)
 
 
-        report_info = report.create({'report': {'objects_created':[],
-                                                'text_message': "Finished running Genome to Genes Table.",
-                                                'file_links': [dir_link]},
-                                                'workspace_name': params['workspace_name']})
+        report_info = report_util.create_extended_report({
+                                        'message': "Finished running Genome to Genes Table.",
+                                        'file_links': [dir_link],
+                                        "report_object_name": params["output_name"],
+                                        'workspace_name': params['workspace_name']
+                                        })
         output = {
             'report_name': report_info['name'],
             'report_ref': report_info['ref'],
