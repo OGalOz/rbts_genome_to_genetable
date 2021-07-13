@@ -77,6 +77,9 @@ def DownloadGenomeToFNA(gfu, genome_ref, scratch_dir):
 
     GenomeToGenbankResult = gfu.genome_to_genbank({'genome_ref': genome_ref})
 
+    logging.info("GenomeToGenbankResult")
+    logging.info(GenomeToGenbankResult)
+
     genbank_fp = GenomeToGenbankResult['genbank_file']['file_path']
 
     genome_fna_fp = get_fa_from_scratch(scratch_dir)
@@ -97,7 +100,7 @@ def get_fa_from_scratch(scratch_dir):
     scratch_files = os.listdir(scratch_dir)
     fna_paths = []
     for f in scratch_files:
-        if f[-2:] == "fa":
+        if f[-3:] == ".fa":
             fna_paths.append(os.path.join(scratch_dir, f))
    
     if len(fna_paths) == 0:
