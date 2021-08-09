@@ -36,11 +36,13 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
 
     Description:
         We use the GenomeFileUtil Object to download the genome
-        information, like the FNA file and the genbank file
+        information: the FNA file and the genbank file,
         to the location 'tmp_dir', then we create a gene table
         with the function 'genbank_and_genome_fna_to_gene_table'.
         The file is created at the location 'tmp_dir/genes.GC'
-        the header columns will always be the same
+        the header columns will always be the same - 
+            locusId, sysName, type, scaffoldId, begin, end, strand, name, desc, GC, nTA
+
     """
 
     # Download genome in GBK format and convert it to fna:
