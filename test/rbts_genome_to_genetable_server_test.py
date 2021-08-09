@@ -53,6 +53,7 @@ class rbts_genome_to_genetableTest(unittest.TestCase):
             print('Test workspace was deleted')
 
     # NOTE: According to Python unittest naming rules test method names should start from 'test'. # noqa
+    """
     def test_your_method(self):
         # Prepare test objects in workspace if needed using
         # self.getWsClient().save_objects({'workspace': self.getWsName(),
@@ -75,3 +76,10 @@ class rbts_genome_to_genetableTest(unittest.TestCase):
         }
 
         ret = self.serviceImpl.run_rbts_genome_to_genetable(self.ctx, test_params)
+    """
+    def test_local_function(self):
+        test_params = {
+                "genome_ref": "62686/4/1" 
+        }
+
+        ret = self.serviceImpl.genome_to_genetable(self.ctx, test_params)

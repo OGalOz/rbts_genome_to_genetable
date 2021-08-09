@@ -22,15 +22,16 @@ module rbts_genome_to_genetable {
     */
     typedef structure {
         string genome_ref;
-    } GeneTableParams
+    } GeneTableParams;
 
     /*
         exit_code (int) success is 0, failure is 1
     */
+
     typedef structure {
         int exit_code;
-    } GenomeToGeneTableResult
+    } GenomeToGeneTableResult;
 
-    funcdef genome_to_genetable(GeneTableParams params) returns (GenomeToGeneTableResults result) authentication required;
+    funcdef genome_to_genetable(GeneTableParams params) returns (GenomeToGeneTableResult output) authentication required;
 
 };

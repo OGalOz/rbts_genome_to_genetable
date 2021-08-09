@@ -342,6 +342,10 @@ class Application(object):
                              name='rbts_genome_to_genetable.run_rbts_genome_to_genetable',
                              types=[dict])
         self.method_authentication['rbts_genome_to_genetable.run_rbts_genome_to_genetable'] = 'required'  # noqa
+        self.rpc_service.add(impl_rbts_genome_to_genetable.genome_to_genetable,
+                             name='rbts_genome_to_genetable.genome_to_genetable',
+                             types=[dict])
+        self.method_authentication['rbts_genome_to_genetable.genome_to_genetable'] = 'required'  # noqa
         self.rpc_service.add(impl_rbts_genome_to_genetable.status,
                              name='rbts_genome_to_genetable.status',
                              types=[dict])

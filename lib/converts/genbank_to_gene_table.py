@@ -63,6 +63,9 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
     type_count_d = {}
 
     locusIdcount = 1
+    
+    # Critical information held in this string
+    critical_info_str = ""
     # Each gb_record represents a scaffold
     for gb_record in gb_record_generator:
 
@@ -124,9 +127,10 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
                 desc = str(current_feat.qualifiers["product"][0])
             else:
                 desc = current_feat.type
-                logging.critical(
-                    f"Could not find description in current_feat: {current_feat}"
-                )
+                critical_info_str += f"Could not find description in current_feat: {current_feat}\n"
+                #logging.critical(
+                #    f"Could not find description in current_feat: {current_feat}"
+                #)
                 # continue
 
             typ_str = current_feat.type.strip()
@@ -164,18 +168,22 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
 
     out_FH.close()
 
+    logging.critical(critical_info_str + "\n\n\n")
+
+
     logging.info(
         "Finished parsing Genbank file. Below are the types of "
         "features and the number of times they appeared."
         " If a feature name is not one of the known feature names,"
         " then it will be listed as such."
     )
+
     report_string = ""
     for feat_name in type_count_d.keys():
         if feat_name not in types_dict:
-            report_string += f"Unknown feature name: {feat_name}, # of occurences: {type_count_d[feat_name]}. "
+            report_string += f"For unknown feature name: '{feat_name}' the # of occurences: {type_count_d[feat_name]}. "
         else:
-            report_string += f"Feature {feat_name}, # of occurences: {type_count_d[feat_name]}. "
+            report_string += f"For feature '{feat_name}' the # of occurences: {type_count_d[feat_name]}. "
 
     logging.info(report_string)
 
