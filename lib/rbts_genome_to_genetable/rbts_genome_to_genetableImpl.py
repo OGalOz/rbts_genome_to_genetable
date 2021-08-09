@@ -46,6 +46,41 @@ class rbts_genome_to_genetable:
         #END_CONSTRUCTOR
         pass
 
+    def genome_to_genetable(self, ctx, params):
+        """
+        Description:
+            Returns a gene table (TSV file) from genome object ref
+        Args:
+            ctx:
+            params (python dict): Contains keys:
+                genome_ref (str): A/B/C
+
+        """
+
+        if not isinstance(params, dict):
+            raise Exception(f"params must be 'dict', instead {type(params)}.")
+        if "genome_ref" not in params:
+            raise Exception("'genome_ref' must be one of params. Current params: "
+                            ", ".join(params.keys()))
+
+        #logging.basicConfig(level=logging.INFO)
+        gfu = GenomeFileUtil(self.callback_url)
+        token = os.environ.get('KB_AUTH_TOKEN', None)
+
+        # Gene table written to location tmp_dir/results/genes.GC
+        # We leave many inputs to this function empty
+        # since the upload_bool is FALSE.
+        # ( ws, dfu, ws_name, gene_table_name empty )
+        res, res_dir, gene_table_fp = genome_ref_to_gene_table(genome_ref, gfu, 
+                                                self.shared_folder,
+                                                {}, "",
+                                                {}, "",
+                                                test_bool=False,
+                                                upload_bool=False)
+
+
+
+
 
     def run_rbts_genome_to_genetable(self, ctx, params):
         """
@@ -72,7 +107,7 @@ class rbts_genome_to_genetable:
         genome_ref, output_name, test_bool, upload_bool = validate_params(params)
 
         # Actual program
-        res, res_dir = genome_ref_to_gene_table(genome_ref, gfu, self.shared_folder,
+        res, res_dir, gene_table_fp = genome_ref_to_gene_table(genome_ref, gfu, self.shared_folder,
                                                ws, params['workspace_name'],
                                                dfu, output_name, test_bool=test_bool,
                                                 upload_bool=upload_bool)

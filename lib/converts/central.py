@@ -25,6 +25,7 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
         gfu: GenomeFileUtil Class Object
         dfu: DataFileUtil Class Object
         ws: Workspace Object
+        ws_name (str): Name of workspace (why)
         tmp_dir (str): Path to directory where work is done
         gene_table_name (str): Output name of gene_table
         test_bool (bool): Whether we should get the workspace
@@ -48,7 +49,6 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
     # Download genome in GBK format and convert it to fna:
     # gt stands for genome table
     genome_fna_fp, gbk_fp = DownloadGenomeToFNA(gfu, genome_ref, tmp_dir)
-    genome_scientific_name, ws_id = GetGenomeOrganismName(ws, genome_ref, test_bool)
 
     res_dir = os.path.join(tmp_dir, "results")
     os.mkdir(res_dir)
@@ -57,6 +57,7 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
     num_lines = genbank_and_genome_fna_to_gene_table(gbk_fp, genome_fna_fp, gene_table_fp)
    
     if upload_bool:
+        genome_scientific_name, ws_id = GetGenomeOrganismName(ws, genome_ref, test_bool)
         res = upload_gene_table_object_to_KBase(gene_table_fp, dfu, ws, ws_name,
                                             num_lines, 
                                             genome_ref, genome_scientific_name,
@@ -65,7 +66,7 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
     else:
         res = {}
 
-    return [res, res_dir]
+    return [res, res_dir, gene_table_fp]
 
 
 
