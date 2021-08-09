@@ -1,0 +1,16 @@
+{
+    "name" : "Create Gene Table from Genome Object",
+    "short_description" : "Take Genome FNA and Genbank files and make a genes table with certain columns.",
+    "long_description" : "Function takes a genome object, downloads the genome fna and the genbank, then runs a function to take out the 'CDS' features and computes their GC (percent) and nTA values and returns a file with one row per gene as a TSV. Similar to GFF files.",
+    "tags" : {
+        "categories" : [],
+        "input": {
+            "file_types": [],
+            "kb_types": []
+        },
+        "output": {
+            "file_types": [],
+            "kb_types": []
+        }
+    }
+}
