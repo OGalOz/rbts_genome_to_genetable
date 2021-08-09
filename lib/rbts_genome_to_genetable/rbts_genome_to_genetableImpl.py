@@ -76,7 +76,10 @@ class rbts_genome_to_genetable:
                                                 {}, "",
                                                 {}, "",
                                                 test_bool=False,
-                                                upload_bool=False)
+                                                upload_bool=False,
+                                                local_func=True)
+
+        return {"exit_code": res}
 
 
 

@@ -7,7 +7,7 @@ We additionally upload the Gene Table data object.
 """
 
 import os
-from Bio import SeqIO
+# from Bio import SeqIO
 import logging
 import datetime
 from converts.genbank_to_gene_table import genbank_and_genome_fna_to_gene_table 
@@ -18,7 +18,8 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
                              ws, ws_name,
                              dfu, gene_table_name,
                              test_bool=False,
-                             upload_bool=True):
+                             upload_bool=True,
+                             local_func=False):
     """
     Args:
         genome_ref (str): 
@@ -64,7 +65,12 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
                                             gene_table_name,
                                             ws_id=ws_id)
     else:
-        res = {}
+        if local_func:
+            # if local function call, res is exit_code, and since
+            # it only reaches here if no Exceptions are raised, exit_code = 0.
+            res = 0
+        else:
+            res = {}
 
     return [res, res_dir, gene_table_fp]
 
