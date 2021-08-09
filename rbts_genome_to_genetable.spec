@@ -26,10 +26,12 @@ module rbts_genome_to_genetable {
 
     /*
         exit_code (int) success is 0, failure is 1
+        filepath (str) path to where the gene table is
     */
 
     typedef structure {
         int exit_code;
+        string filepath;
     } GenomeToGeneTableResult;
 
     funcdef genome_to_genetable(GeneTableParams params) returns (GenomeToGeneTableResult output) authentication required;

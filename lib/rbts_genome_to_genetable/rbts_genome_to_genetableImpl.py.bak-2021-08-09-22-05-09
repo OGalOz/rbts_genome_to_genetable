@@ -29,7 +29,7 @@ class rbts_genome_to_genetable:
     ######################################### noqa
     VERSION = "0.0.1"
     GIT_URL = "https://github.com/OGalOz/rbts_genome_to_genetable.git"
-    GIT_COMMIT_HASH = "a3b5e2f390d62f264f0457abcca760d0c0b14171"
+    GIT_COMMIT_HASH = "1c2a902daaee74b87f015dc037b8a514cbffa0ab"
 
     #BEGIN_CLASS_HEADER
     #END_CLASS_HEADER
@@ -120,9 +120,8 @@ class rbts_genome_to_genetable:
         :param params: instance of type "GeneTableParams" (genome_ref is the
            ref of the genome) -> structure: parameter "genome_ref" of String
         :returns: instance of type "GenomeToGeneTableResult" (exit_code (int)
-           success is 0, failure is 1 filepath (str) path to where the gene
-           table is) -> structure: parameter "exit_code" of Long, parameter
-           "filepath" of String
+           success is 0, failure is 1) -> structure: parameter "exit_code" of
+           Long
         """
         # ctx is the context object
         # return variables are: output
