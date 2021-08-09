@@ -138,7 +138,7 @@ class rbts_genome_to_genetable:
         gfu = GenomeFileUtil(self.callback_url)
         token = os.environ.get('KB_AUTH_TOKEN', None)
 
-        # Gene table written to location tmp_dir/results/genes.GC
+        # Gene table written to location tmp_dir/g2gt_results/genes.GC
         # We leave many inputs to this function empty
         # since the upload_bool is FALSE.
         # ( ws, dfu, ws_name, gene_table_name empty )

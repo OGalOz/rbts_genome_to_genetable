@@ -51,7 +51,7 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
     # gt stands for genome table
     genome_fna_fp, gbk_fp = DownloadGenomeToFNA(gfu, genome_ref, tmp_dir)
 
-    res_dir = os.path.join(tmp_dir, "results")
+    res_dir = os.path.join(tmp_dir, "g2gt_results")
     os.mkdir(res_dir)
     gene_table_fp = os.path.join(res_dir, "genes.GC")
     # This function creates the gene_table at the location gene_table_fp
