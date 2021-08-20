@@ -150,7 +150,7 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
                         [
                             locusId,
                             sysName,
-                            typ,
+                            typ_num,
                             scaffold,
                             begin,
                             end,
