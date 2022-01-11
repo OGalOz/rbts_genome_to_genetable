@@ -49,7 +49,6 @@ class rbts_genome_to_genetable:
 
     def run_rbts_genome_to_genetable(self, ctx, params):
         """
-        This example function accepts any number of parameters and returns results in a KBaseReport
         :param params: instance of mapping from String to unspecified object
         :returns: instance of type "ReportResults" -> structure: parameter
            "report_name" of String, parameter "report_ref" of String
@@ -65,13 +64,14 @@ class rbts_genome_to_genetable:
         ws = Workspace(self.ws_url, token=token)
 
 
-        genome_ref, output_name, test_bool, upload_bool = validate_params(params)
+        genome_ref, output_name, test_bool = validate_params(params)
 
         # Actual program
         res, res_dir, gene_table_fp = genome_ref_to_gene_table(genome_ref, gfu, self.shared_folder,
                                                ws, params['workspace_name'],
-                                               dfu, output_name, test_bool=test_bool,
-                                                upload_bool=upload_bool)
+                                               dfu, output_name, 
+                                               use_JSON_data=False,
+                                               test_bool=test_bool)
 
         logging.info("Results:")
         # Name, Type, Date

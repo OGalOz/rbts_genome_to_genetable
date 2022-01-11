@@ -10,15 +10,18 @@ import os
 # from Bio import SeqIO
 import logging
 import datetime
-from converts.genbank_to_gene_table import genbank_and_genome_fna_to_gene_table 
+import json
+from converts.genbank_to_gene_table import genbank_and_genome_fna_to_gene_table
+from converts.ws_object_data_to_gene_table import obj_data_to_gene_table
 
 
 
 def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
                              ws, ws_name,
                              dfu, gene_table_name,
+                             use_JSON_data=True,
                              test_bool=False,
-                             upload_bool=True,
+                             upload_bool=False,
                              local_func=False):
     """
     Args:
@@ -50,6 +53,11 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
     # Download genome in GBK format and convert it to fna:
     # gt stands for genome table
     genome_fna_fp, gbk_fp = DownloadGenomeToFNA(gfu, genome_ref, tmp_dir)
+    other_genome_data_json_fp = get_other_genome_data(ws, genome_ref, tmp_dir, ws_name)
+
+    if use_JSON_data:
+        JSON_gene_table_df = obj_data_to_gene_table(other_genome_data_json_fp)
+
 
     res_dir = os.path.join(tmp_dir, "g2gt_results")
     os.mkdir(res_dir)
@@ -81,7 +89,9 @@ def DownloadGenomeToFNA(gfu, genome_ref, scratch_dir):
     """
     Args: 
         GFU Object, str (A/B/C), str path
+        ws_obj: KBase workspace object
     Outputs: [fna_fp (str), gbk_fp (str)]
+    
     """
 
     GenomeToGenbankResult = gfu.genome_to_genbank({'genome_ref': genome_ref})
@@ -91,6 +101,7 @@ def DownloadGenomeToFNA(gfu, genome_ref, scratch_dir):
 
     genbank_fp = GenomeToGenbankResult['genbank_file']['file_path']
 
+    # looks through scratch directory for fna file.
     genome_fna_fp = get_fa_from_scratch(scratch_dir)
 
 
@@ -124,6 +135,30 @@ def get_fa_from_scratch(scratch_dir):
         fna_fp = fna_paths[0]
 
     return fna_fp
+
+def get_other_genome_data(ws, genome_ref, tmp_dir, ws_name):
+    """
+    Args:
+        ws KBase workspace object)
+        genome_ref (str) ref of genome
+        tmp_dir (str) Path to tmp dir
+    """
+    genome_ObjectSpecification = {
+            "ref": genome_ref
+    }
+    getObjects2Results = ws.get_objects2({"objects":[genome_ObjectSpecification]})
+
+    logging.info(type(getObjects2Results))
+    logging.info("Got workspace 'get_objects2' results for genome " + genome_ref)
+
+    data_fp = os.path.join(tmp_dir, "GO2_" + genome_ref.replace("/","_") + ".json")
+    with open(data_fp, 'w') as g:
+        g.write(json.dumps(getObjects2Results))
+
+    return data_fp
+
+
+
 
 
 def GetGenomeOrganismName(ws, genome_ref, test_bool):
@@ -251,13 +286,15 @@ def validate_params(params):
         raise Exception(f"Output name cannot contain spaces. Output name: {params['output_name']}")
 
     test_bool = False
-    if 'test_run' in params:
+    if 'app_test' in params:
         test_bool=True
 
-    upload_bool = True
-    if 'upload_bool' in params:
-        upload_bool = params['upload_bool']
+    if "test_num" in params:
+        logging.info("Running test number " + params["test_num"])
 
-    return [params["genome_ref"], params["output_name"], test_bool, upload_bool]
+    # Upload gene table? Deprecated.
+    #upload_bool = False
+
+    return [params["genome_ref"], params["output_name"], test_bool]
 
 

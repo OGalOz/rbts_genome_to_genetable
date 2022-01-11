@@ -7,6 +7,9 @@ the key 'genome_ref' and creates the table at the location
 'g2gt_results/genes.GC' within your working directory (workdir).
 More info can be found under the spec file 'rbts_genome_to_genetable.spec'
 in the main directory of the repository.
+Note that if the genome fna file has scaffold names with spaces in them,
+it only takes the first part of the space, unless it is explicitly stated
+not to.
 
 
 

@@ -97,6 +97,7 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
             strand = "null"
             desc = "null"
             typ = "null"
+            locusId = None
             # locusId = "null"
             sysName = "null"
             name = "null"
@@ -133,6 +134,12 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
                 #)
                 # continue
 
+            if "locus_tag" in current_feat.qualifiers.keys():
+                locusId = current_feat.qualifiers["locus_tag"]
+            elif "old_locus_tag" in current_feat.qualifiers.keys():
+                locusId = current_feat.qualifiers["old_locus_tag"]
+
+
             typ_str = current_feat.type.strip()
             if typ_str in type_count_d:
                 type_count_d[typ_str] += 1
@@ -144,7 +151,9 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
                 # Could not recognize this feature type from its name
                 typ_num = "0"
             if typ_num == "1":
-                locusId = "RBTS_" + str(locusIdcount)
+                if locusId is None:
+                    locusId = "RBTS_" + str(locusIdcount)
+                    locusIdcount += 1
                 out_FH.write(
                     "\t".join(
                         [
@@ -164,7 +173,6 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
                     + "\n"
                 )
                 num_lines += 1
-                locusIdcount += 1
 
     out_FH.close()
 
@@ -343,7 +351,7 @@ def keep_types_gene_table(gene_table_string, types_to_keep):
     return gene_table_string
 
 
-def parseFASTA(fasta_fp, BioSeq_bool=False):
+def parseFASTA(fasta_fp, BioSeq_bool=False, before_first_space_bool=True):
     """
     Args:
         fasta_fp: filepath to FASTA file
@@ -352,16 +360,25 @@ def parseFASTA(fasta_fp, BioSeq_bool=False):
     Returns:
         id2seq: (dict)
             Goes from sequence ID/ name (str) -> sequence (str)
+
+    Description:
+        
     """
     id2seq = {}
     seq_generator = SeqIO.parse(fasta_fp, "fasta")
 
-    if not BioSeq_bool:
-        for sequence in seq_generator:
-            id2seq[sequence.id] = str(sequence.seq)
-    else:
-        for sequence in seq_generator:
-            id2seq[sequence.id] = sequence
+    for sequence in seq_generator:
+        if not BioSeq_bool:
+            crt_seq = str(sequence.seq)
+        else:
+            crt_seq = sequence.seq
+        if before_first_space_bool:
+            if " " in sequence.id:
+                id2seq[sequence.id.split(' ')[0]] = crt_seq
+            else:
+                id2seq[sequence.id] = crt_seq 
+        else:
+            id2seq[sequence.id] = crt_seq 
 
     return id2seq
 
