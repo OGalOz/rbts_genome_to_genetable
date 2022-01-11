@@ -31,7 +31,7 @@ def obj_data_to_gene_table(obj_data_fp, cdss_method=True):
     
     data_list = full_object_dict['data']
     if len(data_list) > 1:
-        logging.warning("Expecting data list to have length 1, instead length: " str(len(data_list)))
+        logging.warning("Expecting data list to have length 1, instead length: " + str(len(data_list)))
     data_object = data_list[0]
     data_level_3 = data_object['data']
 
