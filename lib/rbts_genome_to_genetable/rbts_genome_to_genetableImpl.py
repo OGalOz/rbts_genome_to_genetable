@@ -2,6 +2,7 @@
 #BEGIN_HEADER
 import logging
 import os
+import shutil
 
 from installed_clients.DataFileUtilClient import DataFileUtil
 from installed_clients.GenomeFileUtilClient import GenomeFileUtil
@@ -63,6 +64,14 @@ class rbts_genome_to_genetable:
         token = os.environ.get('KB_AUTH_TOKEN', None)
         ws = Workspace(self.ws_url, token=token)
 
+        
+        if params["app_test"]:
+            x = os.listdir(self.shared_folder)
+            if len(x) > 0:
+                shutil.rmtree(self.shared_folder)
+                logging.info("Cleaning shared folder after multiple tests.")
+                os.mkdir(self.shared_folder)
+        
 
         genome_ref, output_name, test_bool = validate_params(params)
 
@@ -129,6 +138,14 @@ class rbts_genome_to_genetable:
         # return variables are: output
         #BEGIN genome_to_genetable
         logging.info("Beginning conversion from genome_ref to gene table.")
+
+
+        if params["app_test"]:
+            x = os.listdir(self.shared_folder)
+            if len(x) > 0:
+                shutil.rmtree(self.shared_folder)
+                logging.info("Cleaning shared folder after multiple tests.")
+                os.mkdir(self.shared_folder)
 
         logging.basicConfig(level=logging.DEBUG)
         dfu = DataFileUtil(self.callback_url)

@@ -66,8 +66,13 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
         shutil.rmtree(res_dir)
     os.mkdir(res_dir)
     gene_table_fp = os.path.join(res_dir, "genes.GC")
-    # This function creates the gene_table at the location gene_table_fp
-    num_lines = genbank_and_genome_fna_to_gene_table(gbk_fp, genome_fna_fp, gene_table_fp)
+
+    if not use_JSON_data:
+        # This function creates the gene_table at the location gene_table_fp
+        num_lines = genbank_and_genome_fna_to_gene_table(gbk_fp, genome_fna_fp, gene_table_fp)
+    else:
+        num_lines = JSON_gene_table_df.shape[0]
+        JSON_gene_table_df.to_csv(gene_table_fp, sep='\t')
    
     if upload_bool:
         genome_scientific_name, ws_id = GetGenomeOrganismName(ws, genome_ref, test_bool)
@@ -224,7 +229,8 @@ def upload_gene_table_object_to_KBase(gene_table_fp, dfu, ws,
     date_time = datetime.datetime.utcnow()
     #new_desc = "Uploaded by {} on (UTC) {} using Uploader. User Desc: ".format(
     #        self.params['username'], str(date_time))
-    column_headers_str = "locusId, sysName, type, scaffoldId, begin, end, strand, name, desc, GC, nTA"
+    column_headers_str = "locusId, sysName, type, scaffoldId, begin, " + \
+                         "end, strand, name, desc, GC, nTA"
     column_header_list = column_headers_str.split(', ')
 
 

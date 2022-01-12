@@ -208,15 +208,15 @@ def get_GC_and_nTA(dna_seq_str):
     else:
         nTA = 0
         nGC = 0
-        GC_add_d = {"A":0, "T":0, "G":1, "C":1}
-        TA_add_d = {"TA":1, "AA":0, "AG":0, "AT":0, "AC":0,
-                    "CA":0, "CC": 0, "CG": 0, "CT": 0,
-                    "GA":0, "GC": 0, "GG": 0, "GT": 0,
-                    "TC": 0, "TG":0, "TT": 0}
+        GC_add_d = {"A":0, "T":0, "G":1, "C":1, "N":0}
         
         for i in range(len(dna_seq_str) - 1):
-            nGC += GC_add_d[dna_seq_str[i]]
-            nTA += TA_add_d[dna_seq_str[i] + dna_seq_str[i+1]]
+            try:
+                nGC += GC_add_d[dna_seq_str[i]]
+            except Exception as inst:
+                logging.warning(inst)
+            if dna_seq_str[i:i+2] == "TA":
+                nTA += 1
         nGC += GC_add_d[dna_seq_str[-1]]
         
         return round(nGC/len(dna_seq_str), 5), nTA
