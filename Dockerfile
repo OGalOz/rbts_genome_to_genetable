@@ -16,6 +16,8 @@ RUN apt-get install python3
 
 RUN pip install --upgrade pip 
 
+RUN pip install pandas
+
 RUN pip install biopython
 
 

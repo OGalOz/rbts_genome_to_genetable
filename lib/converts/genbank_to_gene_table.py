@@ -1,4 +1,3 @@
-# python3
 import logging
 import sys
 from Bio import SeqIO
@@ -154,6 +153,11 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
                 if locusId is None:
                     locusId = "RBTS_" + str(locusIdcount)
                     locusIdcount += 1
+                elif not isinstance(locusId, str):
+                    if isinstance(locusId, list):
+                        locusId = locusId[0]
+                        #logging.critical("locusId is list: ")
+                        #logging.critical(locusId)
                 out_FH.write(
                     "\t".join(
                         [
@@ -167,7 +171,7 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
                             name,
                             desc,
                             str(GC),
-                            str(nTA),
+                            str(nTA)
                         ]
                     )
                     + "\n"
@@ -199,14 +203,37 @@ def genbank_and_genome_fna_to_gene_table(gbk_fp, gnm_fp, op_fp):
 
 
 def get_GC_and_nTA(dna_seq_str):
+    if len(dna_seq_str) == 0:
+        return 0, 0
+    else:
+        nTA = 0
+        nGC = 0
+        GC_add_d = {"A":0, "T":0, "G":1, "C":1}
+        TA_add_d = {"TA":1, "AA":0, "AG":0, "AT":0, "AC":0,
+                    "CA":0, "CC": 0, "CG": 0, "CT": 0,
+                    "GA":0, "GC": 0, "GG": 0, "GT": 0,
+                    "TC": 0, "TG":0, "TT": 0}
+        
+        for i in range(len(dna_seq_str) - 1):
+            nGC += GC_add_d[dna_seq_str[i]]
+            nTA += TA_add_d[dna_seq_str[i] + dna_seq_str[i+1]]
+        nGC += GC_add_d[dna_seq_str[-1]]
+        
+        return round(nGC/len(dna_seq_str), 5), nTA
+    
+    '''
+    # dna seq_str should be upper case sequence
     GC_float = get_GC_content(dna_seq_str)
     nTA = get_nTA(dna_seq_str)
     return [GC_float, nTA]
+    '''
 
 
 def get_GC_content(dna_seq_str):
     # We get the #GC content of uppercase DNA string.
     # returns float
+    if len(dna_seq_str) > 0:
+        return 0
     return (dna_seq_str.count("G") + dna_seq_str.count("C")) / len(dna_seq_str)
 
 
