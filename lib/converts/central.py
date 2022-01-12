@@ -11,6 +11,7 @@ import os
 import logging
 import datetime
 import json
+import shutil 
 from converts.genbank_to_gene_table import genbank_and_genome_fna_to_gene_table
 from converts.ws_object_data_to_gene_table import obj_data_to_gene_table
 
@@ -60,6 +61,9 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
 
 
     res_dir = os.path.join(tmp_dir, "g2gt_results")
+    if os.path.exists(res_dir):
+        logging.warning("res_dir exists already")
+        shutil.rmtree(res_dir)
     os.mkdir(res_dir)
     gene_table_fp = os.path.join(res_dir, "genes.GC")
     # This function creates the gene_table at the location gene_table_fp
