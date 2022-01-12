@@ -67,7 +67,8 @@ class rbts_genome_to_genetable:
         genome_ref, output_name, test_bool = validate_params(params)
 
         # Actual program
-        res, res_dir, gene_table_fp = genome_ref_to_gene_table(genome_ref, gfu, self.shared_folder,
+        res, res_dir, gene_table_fp = genome_ref_to_gene_table(genome_ref, 
+                                                gfu, self.shared_folder,
                                                ws, params['workspace_name'],
                                                dfu, output_name, 
                                                use_JSON_data=False,
@@ -128,11 +129,19 @@ class rbts_genome_to_genetable:
         # return variables are: output
         #BEGIN genome_to_genetable
         logging.info("Beginning conversion from genome_ref to gene table.")
+
+        logging.basicConfig(level=logging.DEBUG)
+        dfu = DataFileUtil(self.callback_url)
+        gfu = GenomeFileUtil(self.callback_url)
+        # We need the workspace object to get info on the workspace the app is running in.
+        token = os.environ.get('KB_AUTH_TOKEN', None)
+        ws = Workspace(self.ws_url, token=token)
     
         #if not isinstance(params, dict):
         #    raise Exception(f"params must be 'dict', instead {type(params)}.")
         if "genome_ref" not in params:
-            raise Exception("'genome_ref' must be one of params when calling 'genome_to_genetable'. Current params: "
+            raise Exception("'genome_ref' must be one of params when " + \
+                            "calling 'genome_to_genetable'. Current params: "
                             ", ".join(params.keys()))
 
         #logging.basicConfig(level=logging.INFO)
@@ -146,7 +155,7 @@ class rbts_genome_to_genetable:
         res, res_dir, gene_table_fp = genome_ref_to_gene_table(params['genome_ref'],
                                                 gfu, 
                                                 self.shared_folder,
-                                                {}, "",
+                                                ws, "",
                                                 {}, "",
                                                 test_bool=False,
                                                 upload_bool=False,
