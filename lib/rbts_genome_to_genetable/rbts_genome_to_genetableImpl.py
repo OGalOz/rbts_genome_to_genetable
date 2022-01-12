@@ -65,7 +65,7 @@ class rbts_genome_to_genetable:
         ws = Workspace(self.ws_url, token=token)
 
         
-        if params["app_test"]:
+        if "app_test" in params and params["app_test"]:
             x = os.listdir(self.shared_folder)
             if len(x) > 0:
                 shutil.rmtree(self.shared_folder)
@@ -140,7 +140,7 @@ class rbts_genome_to_genetable:
         logging.info("Beginning conversion from genome_ref to gene table.")
 
 
-        if params["app_test"]:
+        if "app_test" in params and params["app_test"]:
             x = os.listdir(self.shared_folder)
             if len(x) > 0:
                 shutil.rmtree(self.shared_folder)
