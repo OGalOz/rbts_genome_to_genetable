@@ -72,7 +72,7 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
         num_lines = genbank_and_genome_fna_to_gene_table(gbk_fp, genome_fna_fp, gene_table_fp)
     else:
         num_lines = JSON_gene_table_df.shape[0]
-        JSON_gene_table_df.to_csv(gene_table_fp, sep='\t')
+        JSON_gene_table_df.to_csv(gene_table_fp, sep='\t', index=False)
    
     if upload_bool:
         genome_scientific_name, ws_id = GetGenomeOrganismName(ws, genome_ref, test_bool)
