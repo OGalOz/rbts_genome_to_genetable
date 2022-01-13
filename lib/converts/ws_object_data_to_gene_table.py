@@ -24,7 +24,8 @@ def obj_data_to_gene_table(obj_data_fp, cdss_method=True,
                                         Has the following columns:
             locusId (str):sysName (str):type (int):scaffoldId (str):begin (int):end (int):
                 strand (str +/-):name (str):desc (str):GC (float [0,1]):nTA (int)
-                AA_seq (str)
+
+            Note: Possible to add: AA_seq (str)
     Description:
         
     """
@@ -80,6 +81,14 @@ def obj_data_to_gene_table(obj_data_fp, cdss_method=True,
         raise Exception("No other methods known")
 
     gene_table_df = pd.DataFrame.from_dict(gene_table_d)
+    cols = [
+            "locusId", "sysName", "type", "scaffoldId", "begin", "end", 
+            "strand", "name", "desc", "GC", "nTA"
+            ]
+    gene_table_df = gene_table_df[cols]
+
+
+
 
     return gene_table_df
 
