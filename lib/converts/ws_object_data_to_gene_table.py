@@ -38,6 +38,11 @@ def obj_data_to_gene_table(obj_data_fp, cdss_method=True,
     data_level_3 = data_object['data']
 
     if cdss_method:
+        if 'cdss' not in data_level_3:
+            logging.critical(full_object_dict)
+            logging.critical(data_object)
+            logging.critical(data_level_3)
+            raise KeyError("Key 'cdss' missing from data_level_3 ^")
         cdss_list = data_level_3['cdss']
         gene_table_list = []
         nCDS = len(cdss_list)
@@ -59,10 +64,15 @@ def obj_data_to_gene_table(obj_data_fp, cdss_method=True,
         # We know nCDS > 0
         parse_fail_ratio = nFails/nCDS
         if parse_fail_ratio > parse_fail_limit:
-            raise Exception("Failed to succesfully parse KBase genome object." + \
+
+            raise RunTimeError("Failed to succesfully parse KBase genome " + \
+                            "object because of failed parsing of " + \
+                            "JSON object. (fail ratio:fail_limit) is" + \
+                            f" ({parse_fail_ratio}:{parse_fail_limit})."
                             " Please contact developers.")
-        logging.info("Failed to parse the following ratio of CDSs: " + \
-                     f"'{nFails/nCDS}'.")
+
+        logging.info("Succeeded to parse CDSs. Ratio of failed parsing: " + \
+                     f"'{parse_fail_ratio}'.")
 
         # Converting gene_table_list into pandas dataframe
         gene_table_d = {x:[] for x in gene_table_list[0].keys()}
@@ -129,8 +139,8 @@ def parse_CDS_info(CDS_info):
             if aliases_l[i][0] == "locus_tag":
                 locus_tag_found = True
                 locusId_obj = aliases_l[i]
+                logging.critical(f"Found locus_tag at different loc of list: {i}")
                 break
-            logging.critical(f"Found locus_tag at different loc of list: {i}")
     else:
         locus_tag_found = True
         # locusId_obj remains the first one

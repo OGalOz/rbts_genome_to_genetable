@@ -45,7 +45,7 @@ class rbts_genome_to_genetableTest(unittest.TestCase):
         suffix = int(time.time() * 1000)
         cls.wsName = "test_RBTS_Genome_to_Genes_Table_" + str(suffix)
         ret = cls.wsClient.create_workspace({'workspace': cls.wsName})  # noqa
-        cls.only_first = False 
+        cls.only_first = False
 
     @classmethod
     def tearDownClass(cls):
@@ -80,7 +80,7 @@ class rbts_genome_to_genetableTest(unittest.TestCase):
     """
     def test_app_function(self):
         test_params = {
-                "genome_ref": "66889/4/1",
+                "genome_ref": "66889/5/1",
                 "workspace_name": self.wsName,
                 "app_test": True
         }
