@@ -76,12 +76,14 @@ class rbts_genome_to_genetable:
         # str str bool
         genome_ref, output_name, test_bool = validate_params(params)
 
+
         # The meat of the program - returns Tuple, str (of directory), str (path)
         res, res_dir, gene_table_fp = genome_ref_to_gene_table(genome_ref, 
                                                 gfu, self.shared_folder,
                                                 ws, params['workspace_name'],
                                                 dfu, output_name, 
-                                                use_JSON_data=False,
+                                                use_JSON_data=True,
+                                                upload_bool=False,
                                                 test_bool=test_bool)
 
         logging.info("Results:")

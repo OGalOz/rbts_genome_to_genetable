@@ -45,6 +45,7 @@ class rbts_genome_to_genetableTest(unittest.TestCase):
         suffix = int(time.time() * 1000)
         cls.wsName = "test_RBTS_Genome_to_Genes_Table_" + str(suffix)
         ret = cls.wsClient.create_workspace({'workspace': cls.wsName})  # noqa
+        cls.only_first = False 
 
     @classmethod
     def tearDownClass(cls):
@@ -77,31 +78,53 @@ class rbts_genome_to_genetableTest(unittest.TestCase):
 
         ret = self.serviceImpl.run_rbts_genome_to_genetable(self.ctx, test_params)
     """
-    def test_local_function1(self):
+    def test_app_function(self):
         test_params = {
-                "genome_ref": "62686/4/1",
+                "genome_ref": "66889/4/1",
                 "workspace_name": self.wsName,
                 "app_test": True
         }
 
         ret = self.serviceImpl.genome_to_genetable(self.ctx, test_params)
-    def test_local_function2(self):
-        test_params = {
-                "genome_ref": "63063/9/1",
-                "workspace_name": self.wsName,
-                "app_test": True
-        }
-        ret = self.serviceImpl.genome_to_genetable(self.ctx, test_params)
-    def test_multiple_genomes(self):
-        genome_refs = ["62686/4/1"]
 
-        for i in range(len(genome_refs)):
-            gnm_ref = genome_refs[i]
+    def test_local_function3(self):
+        if not self.only_first:
             test_params = {
+                    "genome_ref": "66889/3/1",
                     "workspace_name": self.wsName,
-                    "genome_ref": gnm_ref,
-                    "output_name": "BASE_TEST_" + gnm_ref.replace("/","_"),
-                    "app_test": True,
-                    "test_num": str(i+1)
+                    "app_test": True
             }
-            ret = self.serviceImpl.run_rbts_genome_to_genetable(self.ctx, test_params)
+
+            ret = self.serviceImpl.genome_to_genetable(self.ctx, test_params)
+
+    def test_local_function1(self):
+        if not self.only_first:
+            test_params = {
+                    "genome_ref": "62686/4/1",
+                    "workspace_name": self.wsName,
+                    "app_test": True
+            }
+
+            ret = self.serviceImpl.genome_to_genetable(self.ctx, test_params)
+    def test_local_function2(self):
+        if not self.only_first:
+            test_params = {
+                    "genome_ref": "63063/9/1",
+                    "workspace_name": self.wsName,
+                    "app_test": True
+            }
+            ret = self.serviceImpl.genome_to_genetable(self.ctx, test_params)
+    def test_multiple_genomes(self):
+        if not self.only_first:
+            genome_refs = ["62686/4/1", "63063/9/1"]
+
+            for i in range(len(genome_refs)):
+                gnm_ref = genome_refs[i]
+                test_params = {
+                        "workspace_name": self.wsName,
+                        "genome_ref": gnm_ref,
+                        "output_name": "BASE_TEST_" + gnm_ref.replace("/","_"),
+                        "app_test": True,
+                        "test_num": str(i+1)
+                }
+                ret = self.serviceImpl.run_rbts_genome_to_genetable(self.ctx, test_params)

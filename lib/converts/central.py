@@ -93,6 +93,8 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
         else:
             res = {}
 
+    logging.info("Finished running function: genome_ref_to_gene_table")
+
     return [res, res_dir, gene_table_fp]
 
 

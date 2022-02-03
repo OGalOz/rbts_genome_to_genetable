@@ -42,7 +42,7 @@ def obj_data_to_gene_table(obj_data_fp, cdss_method=True,
         gene_table_list = []
         nCDS = len(cdss_list)
         if nCDS == 0:
-            raise Exception("No CDSs found in this genome object. Cannot " + \
+            raise RuntimeError("No CDSs found in this genome object. Cannot " + \
                             "create gene table. Please contact developers " + \
                             "with further questions.")
         logging.info(f"Parsing {nCDS} CDSs")
@@ -80,8 +80,7 @@ def obj_data_to_gene_table(obj_data_fp, cdss_method=True,
             "strand", "name", "desc", "GC", "nTA"
             ]
     gene_table_df = gene_table_df[cols]
-
-
+    logging.info("Finished creating gene table dataframe")
 
 
     return gene_table_df
@@ -155,8 +154,19 @@ def parse_CDS_info(CDS_info):
 
     # Getting GC and nTA
     DNA_seq = CDS_info["dna_sequence"].upper() 
-    gene_table_list_d["GC"] = (DNA_seq.count("G") + DNA_seq.count("C"))/float(len(DNA_seq))
-    gene_table_list_d["nTA"] = DNA_seq.count("TA")
+    nGC = 0
+    nTA = 0
+    s_d = {"G": 1, "C":1, "A":0, "T":0}
+
+    # Placeholder for alg
+    DNA_seq += "T"
+    for i in range(len(DNA_seq) - 1):
+        nGC += s_d[DNA_seq[i]]
+        if DNA_seq[i+1] == "A":
+            if DNA_seq[i] == "T":
+                nTA += 1
+    gene_table_list_d["GC"] = nGC/float(len(DNA_seq) - 1)
+    gene_table_list_d["nTA"] = nTA 
 
     
     # Undecidable parts (from the data object)
