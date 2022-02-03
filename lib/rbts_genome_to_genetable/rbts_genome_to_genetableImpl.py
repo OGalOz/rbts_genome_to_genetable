@@ -72,16 +72,17 @@ class rbts_genome_to_genetable:
                 logging.info("Cleaning shared folder after multiple tests.")
                 os.mkdir(self.shared_folder)
         
-
+        
+        # str str bool
         genome_ref, output_name, test_bool = validate_params(params)
 
-        # Actual program
+        # The meat of the program - returns Tuple, str (of directory), str (path)
         res, res_dir, gene_table_fp = genome_ref_to_gene_table(genome_ref, 
                                                 gfu, self.shared_folder,
-                                               ws, params['workspace_name'],
-                                               dfu, output_name, 
-                                               use_JSON_data=False,
-                                               test_bool=test_bool)
+                                                ws, params['workspace_name'],
+                                                dfu, output_name, 
+                                                use_JSON_data=False,
+                                                test_bool=test_bool)
 
         logging.info("Results:")
         # Name, Type, Date
@@ -137,6 +138,7 @@ class rbts_genome_to_genetable:
         # ctx is the context object
         # return variables are: output
         #BEGIN genome_to_genetable
+        # This is the method that's called by other apps
         logging.info("Beginning conversion from genome_ref to gene table.")
 
 
@@ -157,13 +159,10 @@ class rbts_genome_to_genetable:
         #if not isinstance(params, dict):
         #    raise Exception(f"params must be 'dict', instead {type(params)}.")
         if "genome_ref" not in params:
-            raise Exception("'genome_ref' must be one of params when " + \
+            raise KeyError("'genome_ref' must be one of params when " + \
                             "calling 'genome_to_genetable'. Current params: "
                             ", ".join(params.keys()))
 
-        #logging.basicConfig(level=logging.INFO)
-        gfu = GenomeFileUtil(self.callback_url)
-        token = os.environ.get('KB_AUTH_TOKEN', None)
 
         # Gene table written to location tmp_dir/g2gt_results/genes.GC
         # We leave many inputs to this function empty

@@ -5,12 +5,6 @@ import logging
 import pandas as pd
 
 
-"""
-Gene table looks like
-
-            locusId (str):sysName (str):type (int):scaffoldId (str):begin (int):end (int):
-                strand (str +/-):name (str):desc (str):GC (float [0,1]):nTA (int)
-"""
 
 def obj_data_to_gene_table(obj_data_fp, cdss_method=True,
                             parse_fail_limit=0.1):
@@ -33,7 +27,7 @@ def obj_data_to_gene_table(obj_data_fp, cdss_method=True,
     # We load the JSON object
     full_object_dict = json.loads(open(obj_data_fp).read())
     if not isinstance(full_object_dict, dict) or not "data" in full_object_dict:
-        raise Exception("Program expects Genome JSON object dict " + \
+        raise TypeError("Program expects Genome JSON object dict " + \
                         "to be dict with key 'data'.")
     
     data_list = full_object_dict['data']
@@ -78,7 +72,7 @@ def obj_data_to_gene_table(obj_data_fp, cdss_method=True,
    
     # Note this dataframe also contains amino acid sequence of gene
     else:
-        raise Exception("No other methods known")
+        raise RuntimeError("No other parsing methods created so far.")
 
     gene_table_df = pd.DataFrame.from_dict(gene_table_d)
     cols = [
@@ -140,9 +134,10 @@ def parse_CDS_info(CDS_info):
             logging.critical(f"Found locus_tag at different loc of list: {i}")
     else:
         locus_tag_found = True
+        # locusId_obj remains the first one
 
     if not locus_tag_found:
-        raise Exception("Expecting locus_tag from genome object, did not find it.")
+        raise RuntimeError("Expecting locus_tag from genome CDS object, did not find it.")
     else:
         gene_table_list_d["locusId"] = locusId_obj[1]
         gene_table_list_d["sysName"] =  locusId_obj[1]

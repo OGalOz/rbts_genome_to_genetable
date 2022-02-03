@@ -35,6 +35,8 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
         gene_table_name (str): Output name of gene_table
         test_bool (bool): Whether we should get the workspace
                           from the genome ref or from the workspace.
+
+        # OLD
         upload_bool (bool): Whether we should upload the object to KBase 
 
     Returns:
@@ -54,10 +56,6 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
     # Download genome in GBK format and convert it to fna:
     # gt stands for genome table
     genome_fna_fp, gbk_fp = DownloadGenomeToFNA(gfu, genome_ref, tmp_dir)
-    other_genome_data_json_fp = get_other_genome_data(ws, genome_ref, tmp_dir, ws_name)
-
-    if use_JSON_data:
-        JSON_gene_table_df = obj_data_to_gene_table(other_genome_data_json_fp)
 
 
     res_dir = os.path.join(tmp_dir, "g2gt_results")
@@ -67,14 +65,20 @@ def genome_ref_to_gene_table(genome_ref, gfu, tmp_dir,
     os.mkdir(res_dir)
     gene_table_fp = os.path.join(res_dir, "genes.GC")
 
-    if not use_JSON_data:
-        # This function creates the gene_table at the location gene_table_fp
-        num_lines = genbank_and_genome_fna_to_gene_table(gbk_fp, genome_fna_fp, gene_table_fp)
-    else:
+
+
+    if use_JSON_data:
+        other_genome_data_json_fp = get_other_genome_data(ws, genome_ref, tmp_dir, ws_name)
+        JSON_gene_table_df = obj_data_to_gene_table(other_genome_data_json_fp)
         num_lines = JSON_gene_table_df.shape[0]
         JSON_gene_table_df.to_csv(gene_table_fp, sep='\t', index=False)
+    else:
+        # This function creates the gene_table at the location gene_table_fp
+        num_lines = genbank_and_genome_fna_to_gene_table(gbk_fp, genome_fna_fp, gene_table_fp)
    
     if upload_bool:
+        # This section of code is currently expected to never happen.
+        # No uploads planned
         genome_scientific_name, ws_id = GetGenomeOrganismName(ws, genome_ref, test_bool)
         res = upload_gene_table_object_to_KBase(gene_table_fp, dfu, ws, ws_name,
                                             num_lines, 
