@@ -32,8 +32,10 @@ def obj_data_to_gene_table(obj_data_fp, cdss_method=True,
     
     data_list = full_object_dict['data']
     if len(data_list) > 1:
-        logging.warning("Expecting data list to have length 1, " + \
-                        "instead length: " + str(len(data_list)))
+        logging.warning(''.join(["Expecting data list to have length 1, ",
+                                 "instead length: ",
+                                 str(len(data_list))]))
+        logging.warning(data_list)
     data_object = data_list[0]
     data_level_3 = data_object['data']
 
@@ -166,7 +168,7 @@ def parse_CDS_info(CDS_info):
     DNA_seq = CDS_info["dna_sequence"].upper() 
     nGC = 0
     nTA = 0
-    s_d = {"G": 1, "C":1, "A":0, "T":0}
+    s_d = {"G": 1, "C":1, "A":0, "T":0, "N": 0}
 
     # Placeholder for alg
     DNA_seq += "T"

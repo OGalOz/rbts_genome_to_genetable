@@ -78,7 +78,16 @@ class rbts_genome_to_genetableTest(unittest.TestCase):
 
         ret = self.serviceImpl.run_rbts_genome_to_genetable(self.ctx, test_params)
     """
-    def test_app_function(self):
+    def test_app_function1(self):
+        test_params = {
+                "genome_ref": "66897/5/1",
+                "workspace_name": self.wsName,
+                "app_test": True
+        }
+
+        ret = self.serviceImpl.genome_to_genetable(self.ctx, test_params)
+
+    def test_app_function2(self):
         test_params = {
                 "genome_ref": "66889/5/1",
                 "workspace_name": self.wsName,
