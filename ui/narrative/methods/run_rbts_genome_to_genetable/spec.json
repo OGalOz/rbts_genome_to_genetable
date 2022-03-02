@@ -1,73 +1,91 @@
 {
-    "ver": "1.0.0",
-    "authors": [
-        "omreegaloz"
-    ],
-    "contact": "",
-    "categories": ["active"],
-    "widgets": {
-        "input": null,
-        "output": null
+  "ver": "1.0.0",
+  "authors": [
+    "omreegaloz"
+  ],
+  "contact": "",
+  "categories": [
+    "active"
+  ],
+  "widgets": {
+    "input": null,
+    "output": "no-display"
+  },
+  "parameters": [
+    {
+      "id": "genome_ref",
+      "optional": false,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": [
+        ""
+      ],
+      "field_type": "text",
+      "text_options": {
+        "valid_ws_types": [
+          "KBaseGenomes.Genome"
+        ]
+      }
     },
-    "parameters": [ 
+    {
+      "id": "output_name",
+      "optional": false,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": [
+        ""
+      ],
+      "field_type": "text",
+      "text_options": {
+        "is_output_name": true
+      }
+    }
+  ],
+  "behavior": {
+    "service-mapping": {
+      "url": "",
+      "name": "rbts_genome_to_genetable",
+      "method": "run_rbts_genome_to_genetable",
+      "input_mapping": [
         {
-            "id": "genome_ref",
-            "optional": false,
-            "advanced": false,
-            "allow_multiple": false,
-            "default_values": [ "" ],
-            "field_type": "text",
-            "text_options": {
-                "valid_ws_types": ["KBaseGenomes.Genome"]
-            }
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
         },
         {
-        "id": "output_name",
-            "optional": false,
-            "advanced": false,
-            "allow_multiple": false,
-            "default_values": [ "" ],
-            "field_type": "text",
-            "text_options": {
-                "is_output_name": true
-            }
+          "narrative_system_variable": "workspace_id",
+          "target_property": "workspace_id"
+        },
+        {
+          "input_parameter": "genome_ref",
+          "target_property": "genome_ref",
+          "target_type_transform": "resolved-ref"
+        },
+        {
+          "input_parameter": "output_name",
+          "target_property": "output_name"
         }
-    ],
-    "behavior": {
-        "service-mapping": {
-            "url": "",
-            "name": "rbts_genome_to_genetable",
-            "method": "run_rbts_genome_to_genetable",
-            "input_mapping": [
-                {
-                    "narrative_system_variable": "workspace",
-                    "target_property": "workspace_name"
-                },{
-                    "narrative_system_variable": "workspace_id",
-                    "target_property": "workspace_id"
-                },{
-                    "input_parameter": "genome_ref",
-                    "target_property": "genome_ref",
-                    "target_type_transform": "resolved-ref"
-                },{
-                    "input_parameter": "output_name",
-                    "target_property": "output_name"
-                }
-            ],
-            "output_mapping": [
-                {
-                    "service_method_output_path": [0,"report_name"],
-                    "target_property": "report_name"
-                },{
-                    "service_method_output_path": [0,"report_ref"],
-                    "target_property": "report_ref"
-                },
-                {
-                    "narrative_system_variable": "workspace",
-                    "target_property": "workspace_name"
-                }
-            ]
+      ],
+      "output_mapping": [
+        {
+          "service_method_output_path": [
+            0,
+            "report_name"
+          ],
+          "target_property": "report_name"
+        },
+        {
+          "service_method_output_path": [
+            0,
+            "report_ref"
+          ],
+          "target_property": "report_ref"
+        },
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
         }
-    },
-    "job_id_output_field": "docker"
+      ]
+    }
+  },
+  "job_id_output_field": "docker"
 }

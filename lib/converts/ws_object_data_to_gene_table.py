@@ -3,7 +3,7 @@ import os
 import json
 import logging
 import pandas as pd
-
+import traceback
 
 
 def obj_data_to_gene_table(obj_data_fp, cdss_method=True,
@@ -61,7 +61,7 @@ def obj_data_to_gene_table(obj_data_fp, cdss_method=True,
                 nFails += 1
                 logging.critical(CDS_info)
                 logging.info("Failed to parse above CDS info, due to below:")
-                logging.info(inst)
+                logging.info(repr(traceback.format_stack()))
         
         # We know nCDS > 0
         parse_fail_ratio = nFails/nCDS
