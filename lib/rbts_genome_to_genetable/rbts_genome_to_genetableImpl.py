@@ -57,68 +57,8 @@ class rbts_genome_to_genetable:
         # ctx is the context object
         # return variables are: output
         #BEGIN run_rbts_genome_to_genetable
-        logging.basicConfig(level=logging.DEBUG)
-        dfu = DataFileUtil(self.callback_url)
-        gfu = GenomeFileUtil(self.callback_url)
-        # We need the workspace object to get info on the workspace the app is running in.
-        token = os.environ.get('KB_AUTH_TOKEN', None)
-        ws = Workspace(self.ws_url, token=token)
-
-        
-        if "app_test" in params and params["app_test"]:
-            x = os.listdir(self.shared_folder)
-            if len(x) > 0:
-                shutil.rmtree(self.shared_folder)
-                logging.info("Cleaning shared folder after multiple tests.")
-                os.mkdir(self.shared_folder)
-        
-        
-        # str str bool
-        genome_ref, output_name, test_bool = validate_params(params)
-
-
-        # The meat of the program - returns Tuple, str (of directory), str (path)
-        res, res_dir, gene_table_fp = genome_ref_to_gene_table(genome_ref, 
-                                                gfu, self.shared_folder,
-                                                ws, params['workspace_name'],
-                                                dfu, output_name, 
-                                                use_JSON_data=True,
-                                                upload_bool=False,
-                                                test_bool=test_bool)
-
-        logging.info("Results:")
-        # Name, Type, Date
-        logging.info(res)
-
-
-        # Returning file in zipped format:-------------------------------
-        file_zip_shock_id = dfu.file_to_shock({'file_path': res_dir,
-                                              'pack': 'zip'})['shock_id']
-
-        dir_link = {
-                'shock_id': file_zip_shock_id, 
-               'name':  'results.zip', 
-               'label':'genes_table_output_dir', 
-               'description': 'The directory of outputs from running' \
-                + ' Genome to Genes Table.'
-        }
-
-        report_util = KBaseReport(self.callback_url)
-
-
-        report_info = report_util.create_extended_report({
-                                        'message': "Finished running Genome to Genes Table.",
-                                        'file_links': [dir_link],
-                                        'workspace_name': params['workspace_name']
-                                        })
-
-        logging.info("report_info after creating extended report.")
-        logging.info(report_info)
-
-        output = {
-            'report_name': report_info['name'],
-            'report_ref': report_info['ref'],
-        }
+        res = self.genome_to_genetable(ctx, params)
+        output = res[0]
         #END run_rbts_genome_to_genetable
 
         # At some point might do deeper type checking...
